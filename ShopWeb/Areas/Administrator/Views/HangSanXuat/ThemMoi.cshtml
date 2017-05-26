@@ -1,0 +1,52 @@
+﻿@model WebShop.Areas.Administrator.Models.HangSanXuat
+
+@{
+    ViewBag.Title = "ThemMoi";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ThemMoi</h2>
+
+
+@using (Html.BeginForm("ThemMoi", "HangSanXuat", null, FormMethod.Post, new { enctype="multipart/form-data"}))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        
+
+        <div class="form-group">
+            Tên hãng sản xuất
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.TenHangSanXuat, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TenHangSanXuat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+           Logo
+            <div class="col-md-10">
+                <input type="file" name="upload" id="upload" />
+                @Html.ValidationMessageFor(model => model.LogoURL, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+      
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

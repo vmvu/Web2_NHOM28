@@ -1,0 +1,67 @@
+﻿@model PagedList.IPagedList<WebShop.Areas.Administrator.Models.DonDatHang>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+<div style="background-color:white">
+    <table class="table table-hover no-more-tables">
+        <tr>
+            <th>
+                Mã đơn
+            </th>
+            <th>
+                @Html.ActionLink("Ngày lập", "Index", new { sortOrder = ViewBag.NgayLaps })
+            </th>
+            <th>
+                Tổng tiền
+            </th>
+            <th>
+                Tình trạng
+            </th>
+            <th>
+                Khách hàng
+            </th>
+            <th>
+                Ghi chú
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("ChiTiet", "DonDatHang", new { id = item.MaDonDatHang})">
+                        @Html.DisplayFor(modelItem => item.MaDonDatHang)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NgayLap)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TongThanhTien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TinhTrang.TenTinhTrang)
+                </td>
+                <td> 
+                    @Html.DisplayFor(modelItem => item.AspNetUser.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GhiChu)
+                </td>
+                <td>
+                    <a href="@Url.Action("CapNhat", "DonDatHang", new { id = item.MaDonDatHang })">Cập nhật</a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

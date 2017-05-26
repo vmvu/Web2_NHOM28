@@ -1,0 +1,25 @@
+﻿@using WebShop.Areas.Administrator.Models
+
+
+@{ 
+    var chartkey = Request["key"];
+    if(chartkey != null)
+    {
+        var cachedChart = Chart.GetFromCache(key: chartkey);
+        if (cachedChart == null)
+        {
+            WineShopEntities db = new WineShopEntities();
+            var sp = db.SanPhams.Where(s => s.BiXoa == 0).Select(s => s).Take(5).ToArray<SanPham>();
+            cachedChart = new Chart(600, 400, ChartTheme.Green);
+            cachedChart.AddTitle("Biểu đồ lược xem lưu tại: " + DateTime.Now);
+            cachedChart.AddSeries(
+                name: "Lược xem",
+                axisLabel: "Sản phẩm",
+                xValue: sp, xField: "TenSanPham",
+                yValues: sp, yFields: "SoLuocXem");
+            cachedChart.SaveToCache(key: chartkey, minutesToCache: 2, slidingExpiration: false);
+        }
+        Chart.WriteFromCache(chartkey);
+    }
+}
+

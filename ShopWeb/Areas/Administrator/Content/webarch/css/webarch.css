@@ -537,7 +537,7 @@ body.boxed-layout .footer-widget {
   font-weight: 600;
 }
 .page-sidebar {
-  background-color: #1b1e24 !important;
+  background-color: rgba(3, 121, 111, 0.39) !important;
   height: 100%;
   font-family: 'Roboto';
   -webkit-backface-visibility: hidden;

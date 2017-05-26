@@ -1,0 +1,61 @@
+﻿@model PagedList.IPagedList<WebShop.Areas.Administrator.Models.HangSanXuat>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
+}
+
+<center><h2>NHÀ SẢN XUẤT</h2></center>
+
+<div class="">
+    <div class="page-title">
+        <i class="icon-custom-new"></i>
+        <h3>Danh <span class="semi-bold" >sách</span> </h3>
+        <div class="pull-right actions">
+            <button class="btn btn-primary btn-cons" type="button" id="btn-new-ticket">@Html.ActionLink("Thêm mới", "ThemMoi")</button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+<div style="background-color:white">
+    <table class="table table-hover no-more-tables">
+        <tr>
+            @*<th>
+                Mã
+            </th>*@
+            <th>
+                @Html.ActionLink("Hãng sản xuất", "Index", new { sortOrder = ViewBag.TenHangSanXuats })
+            </th>
+            <th>
+                Logo
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a href="@Url.Action("ChiTiet", "HangSanXuat", new { id = item.MaHangSanXuat})">
+                        @Html.DisplayFor(modelItem => item.TenHangSanXuat)
+                    </a>
+                </td>
+                <td>
+                    <img src="@Url.Content("~/Images/Logo/" + item.LogoURL)" alt="@item.LogoURL" width="60" height="60" />
+                </td>
+
+                <td>
+                    @Html.ActionLink("Cập nhật", "CapNhat", new { id = item.MaHangSanXuat }) |
+                    @Html.ActionLink("Xóa", "Xoa", new { id = item.MaHangSanXuat })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

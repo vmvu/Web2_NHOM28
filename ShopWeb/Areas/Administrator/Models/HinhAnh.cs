@@ -10,13 +10,15 @@
 namespace WebShop.Areas.Administrator.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class sp_helpdiagrams_Result
+    public partial class HinhAnh
     {
-        public string Database { get; set; }
-        public string Name { get; set; }
-        public int ID { get; set; }
-        public string Owner { get; set; }
-        public int OwnerID { get; set; }
+        public int Ma { get; set; }
+        public string TenHinh { get; set; }
+        public Nullable<int> MaSanPham { get; set; }
+        public Nullable<bool> BiXoa { get; set; }
+    
+        public virtual SanPham SanPham { get; set; }
     }
 }

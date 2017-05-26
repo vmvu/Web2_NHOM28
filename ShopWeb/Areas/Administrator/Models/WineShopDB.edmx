@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="WineShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="WineShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -85,6 +85,7 @@
           <Property Name="TongThanhTien" Type="int" />
           <Property Name="MaTinhTrang" Type="int" />
           <Property Name="UserID" Type="nvarchar" MaxLength="128" />
+          <Property Name="GhiChu" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="HangSanXuat">
           <Key>
@@ -94,6 +95,15 @@
           <Property Name="TenHangSanXuat" Type="nvarchar" MaxLength="65" />
           <Property Name="LogoURL" Type="nvarchar" MaxLength="50" />
           <Property Name="BiXoa" Type="int" />
+        </EntityType>
+        <EntityType Name="HinhAnh">
+          <Key>
+            <PropertyRef Name="Ma" />
+          </Key>
+          <Property Name="Ma" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenHinh" Type="varchar" MaxLength="255" />
+          <Property Name="MaSanPham" Type="int" />
+          <Property Name="BiXoa" Type="bit" />
         </EntityType>
         <EntityType Name="LoaiSanPham">
           <Key>
@@ -109,7 +119,6 @@
           </Key>
           <Property Name="MaSanPham" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TenSanPham" Type="nvarchar" MaxLength="50" />
-          <Property Name="HinhURL" Type="nvarchar" MaxLength="50" />
           <Property Name="GiaSanPham" Type="int" />
           <Property Name="NgayNhap" Type="datetime" />
           <Property Name="SoLuongTon" Type="int" />
@@ -241,6 +250,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_HinhAnh_SanPham">
+          <End Role="SanPham" Type="Self.SanPham" Multiplicity="0..1" />
+          <End Role="HinhAnh" Type="Self.HinhAnh" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="MaSanPham" />
+            </Principal>
+            <Dependent Role="HinhAnh">
+              <PropertyRef Name="MaSanPham" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SanPham_HangSanXuat">
           <End Role="HangSanXuat" Type="Self.HangSanXuat" Multiplicity="0..1" />
           <End Role="SanPham" Type="Self.SanPham" Multiplicity="*" />
@@ -306,6 +327,7 @@
           <EntitySet Name="ChiTietDonDatHang" EntityType="Self.ChiTietDonDatHang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DonDatHang" EntityType="Self.DonDatHang" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="HangSanXuat" EntityType="Self.HangSanXuat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HinhAnh" EntityType="Self.HinhAnh" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LoaiSanPham" EntityType="Self.LoaiSanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -342,6 +364,10 @@
             <End Role="TinhTrang" EntitySet="TinhTrang" />
             <End Role="DonDatHang" EntitySet="DonDatHang" />
           </AssociationSet>
+          <AssociationSet Name="FK_HinhAnh_SanPham" Association="Self.FK_HinhAnh_SanPham">
+            <End Role="SanPham" EntitySet="SanPham" />
+            <End Role="HinhAnh" EntitySet="HinhAnh" />
+          </AssociationSet>
           <AssociationSet Name="FK_SanPham_HangSanXuat" Association="Self.FK_SanPham_HangSanXuat">
             <End Role="HangSanXuat" EntitySet="HangSanXuat" />
             <End Role="SanPham" EntitySet="SanPham" />
@@ -351,8 +377,7 @@
             <End Role="SanPham" EntitySet="SanPham" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WineShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -366,7 +391,7 @@
           <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
-        <EntityType Name="AspNetRoles">
+        <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -374,7 +399,7 @@
           <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
         </EntityType>
-        <EntityType Name="AspNetUserClaims">
+        <EntityType Name="AspNetUserClaim">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -382,9 +407,9 @@
           <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaims" ToRole="AspNetUsers" />
         </EntityType>
-        <EntityType Name="AspNetUserLogins">
+        <EntityType Name="AspNetUserLogin">
           <Key>
             <PropertyRef Name="LoginProvider" />
             <PropertyRef Name="ProviderKey" />
@@ -393,9 +418,9 @@
           <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
         </EntityType>
-        <EntityType Name="AspNetUsers">
+        <EntityType Name="AspNetUser">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -413,7 +438,7 @@
           <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserClaims" />
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
-          <NavigationProperty Name="DonDatHang" Relationship="Self.FK_DonDatHang_AspNetUsers" FromRole="AspNetUsers" ToRole="DonDatHang" />
+          <NavigationProperty Name="DonDatHangs" Relationship="Self.FK_DonDatHang_AspNetUsers" FromRole="AspNetUsers" ToRole="DonDatHang" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
         <EntityType Name="ChiTietDonDatHang">
@@ -437,9 +462,10 @@
           <Property Name="TongThanhTien" Type="Int32" />
           <Property Name="MaTinhTrang" Type="Int32" />
           <Property Name="UserID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_DonDatHang_AspNetUsers" FromRole="DonDatHang" ToRole="AspNetUsers" />
-          <NavigationProperty Name="ChiTietDonDatHang" Relationship="Self.FK_ChiTietDonDatHang_DonDatHang" FromRole="DonDatHang" ToRole="ChiTietDonDatHang" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_DonDatHang_AspNetUsers" FromRole="DonDatHang" ToRole="AspNetUsers" />
+          <NavigationProperty Name="ChiTietDonDatHangs" Relationship="Self.FK_ChiTietDonDatHang_DonDatHang" FromRole="DonDatHang" ToRole="ChiTietDonDatHang" />
           <NavigationProperty Name="TinhTrang" Relationship="Self.FK_DonDatHang_TinhTrang" FromRole="DonDatHang" ToRole="TinhTrang" />
+          <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="HangSanXuat">
           <Key>
@@ -449,7 +475,7 @@
           <Property Name="TenHangSanXuat" Type="String" MaxLength="65" FixedLength="false" Unicode="true" />
           <Property Name="LogoURL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BiXoa" Type="Int32" />
-          <NavigationProperty Name="SanPham" Relationship="Self.FK_SanPham_HangSanXuat" FromRole="HangSanXuat" ToRole="SanPham" />
+          <NavigationProperty Name="SanPhams" Relationship="Self.FK_SanPham_HangSanXuat" FromRole="HangSanXuat" ToRole="SanPham" />
         </EntityType>
         <EntityType Name="LoaiSanPham">
           <Key>
@@ -458,7 +484,7 @@
           <Property Name="MaLoaiSanPham" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenLoaiSanPham" Type="String" MaxLength="65" FixedLength="false" Unicode="true" />
           <Property Name="BiXoa" Type="Int32" />
-          <NavigationProperty Name="SanPham" Relationship="Self.FK_SanPham_LoaiSanPham" FromRole="LoaiSanPham" ToRole="SanPham" />
+          <NavigationProperty Name="SanPhams" Relationship="Self.FK_SanPham_LoaiSanPham" FromRole="LoaiSanPham" ToRole="SanPham" />
         </EntityType>
         <EntityType Name="SanPham">
           <Key>
@@ -466,7 +492,6 @@
           </Key>
           <Property Name="MaSanPham" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenSanPham" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="HinhURL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="GiaSanPham" Type="Int32" />
           <Property Name="NgayNhap" Type="DateTime" Precision="3" />
           <Property Name="SoLuongTon" Type="Int32" />
@@ -476,11 +501,12 @@
           <Property Name="BiXoa" Type="Int32" />
           <Property Name="MaLoaiSanPham" Type="Int32" />
           <Property Name="MaHangSanXuat" Type="Int32" />
-          <NavigationProperty Name="ChiTietDonDatHang" Relationship="Self.FK_ChiTietDonDatHang_SanPham" FromRole="SanPham" ToRole="ChiTietDonDatHang" />
+          <NavigationProperty Name="ChiTietDonDatHangs" Relationship="Self.FK_ChiTietDonDatHang_SanPham" FromRole="SanPham" ToRole="ChiTietDonDatHang" />
           <NavigationProperty Name="HangSanXuat" Relationship="Self.FK_SanPham_HangSanXuat" FromRole="SanPham" ToRole="HangSanXuat" />
           <NavigationProperty Name="LoaiSanPham" Relationship="Self.FK_SanPham_LoaiSanPham" FromRole="SanPham" ToRole="LoaiSanPham" />
+          <NavigationProperty Name="HinhAnhs" Relationship="WineShopModel.FK_HinhAnh_SanPham" FromRole="SanPham" ToRole="HinhAnh" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
@@ -496,13 +522,13 @@
           </Key>
           <Property Name="MaTinhTrang" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenTinhTrang" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DonDatHang" Relationship="Self.FK_DonDatHang_TinhTrang" FromRole="TinhTrang" ToRole="DonDatHang" />
+          <NavigationProperty Name="DonDatHangs" Relationship="Self.FK_DonDatHang_TinhTrang" FromRole="TinhTrang" ToRole="DonDatHang" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaim" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -513,10 +539,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogin" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -527,7 +553,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_DonDatHang_AspNetUsers">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="0..1" />
           <End Role="DonDatHang" Type="Self.DonDatHang" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
@@ -599,22 +625,22 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="AspNetUserRoles">
-          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <End Role="AspNetRoles" Type="Self.AspNetRole" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="*" />
         </Association>
         <EntityContainer Name="WineShopEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
-          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
-          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" />
-          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
-          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
-          <EntitySet Name="ChiTietDonDatHang" EntityType="Self.ChiTietDonDatHang" />
-          <EntitySet Name="DonDatHang" EntityType="Self.DonDatHang" />
-          <EntitySet Name="HangSanXuat" EntityType="Self.HangSanXuat" />
-          <EntitySet Name="LoaiSanPham" EntityType="Self.LoaiSanPham" />
-          <EntitySet Name="SanPham" EntityType="Self.SanPham" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="TinhTrang" EntityType="Self.TinhTrang" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="ChiTietDonDatHangs" EntityType="Self.ChiTietDonDatHang" />
+          <EntitySet Name="DonDatHangs" EntityType="Self.DonDatHang" />
+          <EntitySet Name="HangSanXuats" EntityType="Self.HangSanXuat" />
+          <EntitySet Name="LoaiSanPhams" EntityType="Self.LoaiSanPham" />
+          <EntitySet Name="SanPhams" EntityType="Self.SanPham" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="TinhTrangs" EntityType="Self.TinhTrang" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -625,27 +651,27 @@
           </AssociationSet>
           <AssociationSet Name="FK_DonDatHang_AspNetUsers" Association="Self.FK_DonDatHang_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="DonDatHang" EntitySet="DonDatHang" />
+            <End Role="DonDatHang" EntitySet="DonDatHangs" />
           </AssociationSet>
           <AssociationSet Name="FK_ChiTietDonDatHang_DonDatHang" Association="Self.FK_ChiTietDonDatHang_DonDatHang">
-            <End Role="DonDatHang" EntitySet="DonDatHang" />
-            <End Role="ChiTietDonDatHang" EntitySet="ChiTietDonDatHang" />
+            <End Role="DonDatHang" EntitySet="DonDatHangs" />
+            <End Role="ChiTietDonDatHang" EntitySet="ChiTietDonDatHangs" />
           </AssociationSet>
           <AssociationSet Name="FK_ChiTietDonDatHang_SanPham" Association="Self.FK_ChiTietDonDatHang_SanPham">
-            <End Role="SanPham" EntitySet="SanPham" />
-            <End Role="ChiTietDonDatHang" EntitySet="ChiTietDonDatHang" />
+            <End Role="SanPham" EntitySet="SanPhams" />
+            <End Role="ChiTietDonDatHang" EntitySet="ChiTietDonDatHangs" />
           </AssociationSet>
           <AssociationSet Name="FK_DonDatHang_TinhTrang" Association="Self.FK_DonDatHang_TinhTrang">
-            <End Role="TinhTrang" EntitySet="TinhTrang" />
-            <End Role="DonDatHang" EntitySet="DonDatHang" />
+            <End Role="TinhTrang" EntitySet="TinhTrangs" />
+            <End Role="DonDatHang" EntitySet="DonDatHangs" />
           </AssociationSet>
           <AssociationSet Name="FK_SanPham_HangSanXuat" Association="Self.FK_SanPham_HangSanXuat">
-            <End Role="HangSanXuat" EntitySet="HangSanXuat" />
-            <End Role="SanPham" EntitySet="SanPham" />
+            <End Role="HangSanXuat" EntitySet="HangSanXuats" />
+            <End Role="SanPham" EntitySet="SanPhams" />
           </AssociationSet>
           <AssociationSet Name="FK_SanPham_LoaiSanPham" Association="Self.FK_SanPham_LoaiSanPham">
-            <End Role="LoaiSanPham" EntitySet="LoaiSanPham" />
-            <End Role="SanPham" EntitySet="SanPham" />
+            <End Role="LoaiSanPham" EntitySet="LoaiSanPhams" />
+            <End Role="SanPham" EntitySet="SanPhams" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -681,6 +707,11 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <EntitySet Name="HinhAnhs" EntityType="WineShopModel.HinhAnh" />
+          <AssociationSet Name="FK_HinhAnh_SanPham" Association="WineShopModel.FK_HinhAnh_SanPham">
+            <End Role="SanPham" EntitySet="SanPhams" />
+            <End Role="HinhAnh" EntitySet="HinhAnhs" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -693,6 +724,28 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="HinhAnh">
+          <Key>
+            <PropertyRef Name="Ma" />
+          </Key>
+          <Property Name="Ma" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenHinh" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="MaSanPham" Type="Int32" />
+          <Property Name="BiXoa" Type="Boolean" />
+          <NavigationProperty Name="SanPham" Relationship="WineShopModel.FK_HinhAnh_SanPham" FromRole="HinhAnh" ToRole="SanPham" />
+        </EntityType>
+        <Association Name="FK_HinhAnh_SanPham">
+          <End Type="WineShopModel.SanPham" Role="SanPham" Multiplicity="0..1" />
+          <End Type="WineShopModel.HinhAnh" Role="HinhAnh" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SanPham">
+              <PropertyRef Name="MaSanPham" />
+            </Principal>
+            <Dependent Role="HinhAnh">
+              <PropertyRef Name="MaSanPham" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -710,7 +763,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
-            <EntityTypeMapping TypeName="WineShopModel.AspNetRoles">
+            <EntityTypeMapping TypeName="WineShopModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -718,7 +771,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUserClaims">
-            <EntityTypeMapping TypeName="WineShopModel.AspNetUserClaims">
+            <EntityTypeMapping TypeName="WineShopModel.AspNetUserClaim">
               <MappingFragment StoreEntitySet="AspNetUserClaims">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -728,7 +781,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUserLogins">
-            <EntityTypeMapping TypeName="WineShopModel.AspNetUserLogins">
+            <EntityTypeMapping TypeName="WineShopModel.AspNetUserLogin">
               <MappingFragment StoreEntitySet="AspNetUserLogins">
                 <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
                 <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
@@ -737,7 +790,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AspNetUsers">
-            <EntityTypeMapping TypeName="WineShopModel.AspNetUsers">
+            <EntityTypeMapping TypeName="WineShopModel.AspNetUser">
               <MappingFragment StoreEntitySet="AspNetUsers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -754,7 +807,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ChiTietDonDatHang">
+          <EntitySetMapping Name="ChiTietDonDatHangs">
             <EntityTypeMapping TypeName="WineShopModel.ChiTietDonDatHang">
               <MappingFragment StoreEntitySet="ChiTietDonDatHang">
                 <ScalarProperty Name="MaChiTietDonDatHang" ColumnName="MaChiTietDonDatHang" />
@@ -765,9 +818,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DonDatHang">
+          <EntitySetMapping Name="DonDatHangs">
             <EntityTypeMapping TypeName="WineShopModel.DonDatHang">
               <MappingFragment StoreEntitySet="DonDatHang">
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
                 <ScalarProperty Name="MaDonDatHang" ColumnName="MaDonDatHang" />
                 <ScalarProperty Name="NgayLap" ColumnName="NgayLap" />
                 <ScalarProperty Name="TongThanhTien" ColumnName="TongThanhTien" />
@@ -776,7 +830,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="HangSanXuat">
+          <EntitySetMapping Name="HangSanXuats">
             <EntityTypeMapping TypeName="WineShopModel.HangSanXuat">
               <MappingFragment StoreEntitySet="HangSanXuat">
                 <ScalarProperty Name="MaHangSanXuat" ColumnName="MaHangSanXuat" />
@@ -786,7 +840,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LoaiSanPham">
+          <EntitySetMapping Name="LoaiSanPhams">
             <EntityTypeMapping TypeName="WineShopModel.LoaiSanPham">
               <MappingFragment StoreEntitySet="LoaiSanPham">
                 <ScalarProperty Name="MaLoaiSanPham" ColumnName="MaLoaiSanPham" />
@@ -795,12 +849,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SanPham">
+          <EntitySetMapping Name="SanPhams">
             <EntityTypeMapping TypeName="WineShopModel.SanPham">
               <MappingFragment StoreEntitySet="SanPham">
                 <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
                 <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-                <ScalarProperty Name="HinhURL" ColumnName="HinhURL" />
                 <ScalarProperty Name="GiaSanPham" ColumnName="GiaSanPham" />
                 <ScalarProperty Name="NgayNhap" ColumnName="NgayNhap" />
                 <ScalarProperty Name="SoLuongTon" ColumnName="SoLuongTon" />
@@ -814,7 +867,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="WineShopModel.sysdiagrams">
+            <EntityTypeMapping TypeName="WineShopModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -824,7 +877,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TinhTrang">
+          <EntitySetMapping Name="TinhTrangs">
             <EntityTypeMapping TypeName="WineShopModel.TinhTrang">
               <MappingFragment StoreEntitySet="TinhTrang">
                 <ScalarProperty Name="MaTinhTrang" ColumnName="MaTinhTrang" />
@@ -864,6 +917,16 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="WineShopModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="WineShopModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="HinhAnhs">
+            <EntityTypeMapping TypeName="WineShopModel.HinhAnh">
+              <MappingFragment StoreEntitySet="HinhAnh">
+                <ScalarProperty Name="BiXoa" ColumnName="BiXoa" />
+                <ScalarProperty Name="MaSanPham" ColumnName="MaSanPham" />
+                <ScalarProperty Name="TenHinh" ColumnName="TenHinh" />
+                <ScalarProperty Name="Ma" ColumnName="Ma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -878,7 +941,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

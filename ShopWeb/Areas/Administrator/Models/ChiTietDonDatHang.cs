@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ShopWeb.Areas.Administrator.Models
+namespace WebShop.Areas.Administrator.Models
 {
     using System;
     using System.Collections.Generic;

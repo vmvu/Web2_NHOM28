@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'E:\Visual\C#\DoAn_Web\ShopWeb3\ShopWeb\ShopWeb\Areas\Administrator\Models\WineShopDB.edmx'. 
+﻿// T4 code generation is enabled for model 'E:\Visual\C#\DoAn_Web\WebShop_goc\WebShop\Areas\Administrator\Models\WineShopDB.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

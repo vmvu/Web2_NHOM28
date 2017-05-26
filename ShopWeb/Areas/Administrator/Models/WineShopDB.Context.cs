@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ShopWeb.Areas.Administrator.Models
+namespace WebShop.Areas.Administrator.Models
 {
     using System;
     using System.Data.Entity;
@@ -28,17 +28,18 @@ namespace ShopWeb.Areas.Administrator.Models
         }
     
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
-        public virtual DbSet<ChiTietDonDatHang> ChiTietDonDatHang { get; set; }
-        public virtual DbSet<DonDatHang> DonDatHang { get; set; }
-        public virtual DbSet<HangSanXuat> HangSanXuat { get; set; }
-        public virtual DbSet<LoaiSanPham> LoaiSanPham { get; set; }
-        public virtual DbSet<SanPham> SanPham { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<TinhTrang> TinhTrang { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<ChiTietDonDatHang> ChiTietDonDatHangs { get; set; }
+        public virtual DbSet<DonDatHang> DonDatHangs { get; set; }
+        public virtual DbSet<HangSanXuat> HangSanXuats { get; set; }
+        public virtual DbSet<LoaiSanPham> LoaiSanPhams { get; set; }
+        public virtual DbSet<SanPham> SanPhams { get; set; }
+        public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
+        public virtual DbSet<TinhTrang> TinhTrangs { get; set; }
+        public virtual DbSet<HinhAnh> HinhAnhs { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
