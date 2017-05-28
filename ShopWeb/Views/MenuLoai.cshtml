@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ShopWeb.Models.LoaiSanPham>
+
+<div class="sub-menu">
+    <table>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td width="400px">
+                @Html.ActionLink(item.TenLoaiSanPham, "HienThiSanPhamTheoLoai", "SanPhams", new { id = item.MaLoaiSanPham }, null)
+            </td>
+         </tr>
+        }
+    </table>
+</div>
