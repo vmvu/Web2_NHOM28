@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ShopWeb.Models.SanPham>
+
+<div class="m-b-5 input-prepend inside search-form no-boarder">
+    <div class="container main-header">
+        <div class="">
+            <div>
+                @using (Html.BeginForm("TimKiemSP", "SanPhams"))
+                {
+                    <table>
+                        <tr>
+                            <td>
+                                Sản phẩm:
+                                <input class="no-border" name="txtTimkiem" style="background-color: #e5e5e5; height: 25px" />
+
+                                Loại sản phẩm:
+                                @Html.DropDownList("MaLoaiSanPham", (IEnumerable<SelectListItem>)ViewBag.LSPs, "Chọn loại sản phẩm")
+
+                                Hãng sản xuất:
+                                @Html.DropDownList("MaHangSanXuat", (IEnumerable<SelectListItem>)ViewBag.HSXs, "Chọn nhà sản xuất")
+
+                                Giá:
+                                <input class="no-border" name="txtGia1" style="background-color: #e5e5e5; height: 25px; width: 75px" />
+                                ->
+                                <input class="no-border" name="txtGia2" style="background-color: #e5e5e5; height: 25px; width: 75px" />
+                                <button type="submit" style="background-color:#e5e5e5; height:25px; width: 50px;"><img src="~/images/search.png" /></button>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
