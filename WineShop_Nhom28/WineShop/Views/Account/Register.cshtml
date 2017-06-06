@@ -10,6 +10,7 @@
                     <div class="col-sm-6">
                         <div class="box-authentication">
                             <h3>Tạo một tài khoản</h3>
+                            @ViewBag.Message
                             <p>Vui lòng nhập địa chỉ email của bạn để tạo tài khoản.</p>
                             @Html.AntiForgeryToken()
                             @Html.ValidationSummary("")
