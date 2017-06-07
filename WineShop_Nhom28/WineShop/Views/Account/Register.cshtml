@@ -1,4 +1,7 @@
 ﻿@model WineShop.Models.RegisterViewModel
+@{
+    Layout = "~/Views/Shared/LayoutNoSearch.cshtml";
+}
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post))
 {
@@ -10,7 +13,7 @@
                     <div class="col-sm-6">
                         <div class="box-authentication">
                             <h3>Tạo một tài khoản</h3>
-                            @ViewBag.Message
+                            <p>@ViewBag.Message</p>
                             <p>Vui lòng nhập địa chỉ email của bạn để tạo tài khoản.</p>
                             @Html.AntiForgeryToken()
                             @Html.ValidationSummary("")
