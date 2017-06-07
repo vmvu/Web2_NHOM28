@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using WineShop.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace WineShop
 {
@@ -18,6 +20,27 @@ namespace WineShop
     {
         public Task SendAsync(IdentityMessage message)
         {
+            var client = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                UseDefaultCredentials = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Credentials = new NetworkCredential("vltteam14ck3@gmail.com", "vltteam14ck3mail.com"),
+                EnableSsl = true,
+            };
+
+            var from = new MailAddress("vltteam14ck3@gmail.com", "WineShop");
+            var to = new MailAddress(message.Destination);
+
+            var mail = new MailMessage(from, to)
+            {
+                Subject = message.Subject,
+                Body = message.Body,
+                IsBodyHtml = true,
+            };
+
+            client.Send(mail);
             // Plug in your email service here to send an email.
             return Task.FromResult(0);
         }
