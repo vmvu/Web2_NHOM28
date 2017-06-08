@@ -20,7 +20,7 @@ namespace WineShop.Areas.Administrator.Controllers
             }
             ViewBag.TenAction = "LoaiSanPham";
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ THEO LOẠI SẢN PHẨM";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.imagePath = "lsp_chart.png";
             return PartialView("Index");
@@ -33,7 +33,7 @@ namespace WineShop.Areas.Administrator.Controllers
                 return RedirectToAction("Index", "DangNhap");
             }
             ViewBag.TenAction = "LoaiSanPham";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             Session["a"] = "BieuDo";
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ THEO LOẠI SẢN PHẨM";
@@ -62,7 +62,7 @@ namespace WineShop.Areas.Administrator.Controllers
             }
             ViewBag.TenAction = "HSX";
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ DOANH THU THEO HÃNG SẢN XUẤT";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.imagePath = "hsx_chart.png";
             return PartialView("Index");
@@ -75,7 +75,7 @@ namespace WineShop.Areas.Administrator.Controllers
                 return RedirectToAction("Index", "DangNhap");
             }
             ViewBag.TenAction = "HSX";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ DOANH THU THEO HÃNG SẢN XUẤT";
             ViewBag.imagePath = "hsx_chart.png";
@@ -102,7 +102,7 @@ namespace WineShop.Areas.Administrator.Controllers
             }
             ViewBag.TenAction = "SanPham";
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ DOANH THU THEO SẢN PHẨM";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.imagePath = "sp_chart.png";
             return PartialView("Index");
@@ -116,7 +116,7 @@ namespace WineShop.Areas.Administrator.Controllers
                 return RedirectToAction("Index", "DangNhap");
             }
             ViewBag.TenAction = "SanPham";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ DOANH THU THEO SẢN PHẨM";
             ViewBag.imagePath = "sp_chart.png";
@@ -148,7 +148,7 @@ namespace WineShop.Areas.Administrator.Controllers
             }
             ViewBag.TenAction = "Thang";
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ DOANH THU THEO THÁNG";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+             var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.imagePath = "thang_chart.png";
             return PartialView("Index");
@@ -161,7 +161,7 @@ namespace WineShop.Areas.Administrator.Controllers
                 return RedirectToAction("Index", "DangNhap");
             }
             ViewBag.TenAction = "Thang";
-            var namList = db.DonDatHangs.Select(d => d.NgayLap);
+            var namList = db.DonDatHangs.Select(d => d.NgayLap.Value.Year).Distinct();
             ViewBag.NamLists = namList;
             ViewBag.titles = "BIỂU ĐỒ THỐNG KÊ DOANH THU THEO THÁNG";
             ViewBag.imagePath = "thang_chart.png";
@@ -171,7 +171,7 @@ namespace WineShop.Areas.Administrator.Controllers
                          group ct by ddh.NgayLap.Value.Month into g
                          select new
                          {
-                             Thang = g.Key,
+                             Thang = g.Key.ToString(),
                              tong = g.Sum(t => t.GiaBan.Value * t.SoLuong.Value)
                          };
             createChart("tháng", "tháng", _thang, "Thang", "thang_chart.png", ChartTheme.Yellow);
