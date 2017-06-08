@@ -19,7 +19,7 @@ namespace WineShop.Areas.Administrator.Controllers
         
         public ActionResult Index(string sortOrder, string currentFilter, string TimSanPham, int? page)
         {
-            if(Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if(Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -76,7 +76,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ChiTiet(int? id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -90,7 +90,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ThemMoi()
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -105,7 +105,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ThemMoi([Bind(Include = "MaSanPham, TenSanPham, GiaSanPham, NgayNhap, MoTa,SoLuongTon, MaLoaiSanPham, MaHangSanXuat, Hinh")] SanPham sanpham, IEnumerable<HttpPostedFileBase> upload)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -147,7 +147,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult Xoa(int? id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -171,6 +171,10 @@ namespace WineShop.Areas.Administrator.Controllers
                     r.MaSanPham = null;
                     r.BiXoa = true;
                 }
+                foreach(var r in hinhAnhList)
+                {
+                    hinhAnhList.Remove(r);
+                }
             }
 
 
@@ -188,7 +192,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult CapNhat(int? id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -209,7 +213,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CapNhat([Bind(Include = "MaSanPham, TenSanPham, GiaSanPham, NgayNhap, SoLuongTon, MoTa, MaLoaiSanPham, MaHangSanXuat")] SanPham sanpham, IEnumerable<HttpPostedFileBase> upload, IEnumerable<String> GiaTri)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -237,6 +241,12 @@ namespace WineShop.Areas.Administrator.Controllers
                             System.IO.File.Delete(hinhCu);
                         }
                         ha.BiXoa = true;
+                        ha.MaSanPham = null;
+                    }
+                    foreach(var r in GiaTri)
+                    {
+                        HinhAnh ha = listHinhAnh.Single(h => h.Ma == Int16.Parse(r));
+                        listHinhAnh.Remove(ha);
                     }
                 }
                 

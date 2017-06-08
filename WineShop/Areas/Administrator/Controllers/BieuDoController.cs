@@ -14,7 +14,7 @@ namespace WineShop.Areas.Administrator.Controllers
         // GET: Administrator/BieuDo
         public ActionResult LoaiSanPham()
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -28,7 +28,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [HttpPost]
         public ActionResult LoaiSanPham(int? nam)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -50,13 +50,13 @@ namespace WineShop.Areas.Administrator.Controllers
                                    tong = ten.Sum(t => t.ct.GiaBan.Value * t.ct.SoLuong.Value)
                                };
 
-            createChart(nam.Value, "loại sản phẩm", "loại sản phẩm", _loaisanpham, "TenLoaiSanPham", "lsp_chart.png", getBackColorForChart("blue"));
+            createChart( "loại sản phẩm", "loại sản phẩm", _loaisanpham, "TenLoaiSanPham", "lsp_chart.png", getBackColorForChart("blue"));
             return PartialView("Index");
         }
 
         public ActionResult HSX()
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -70,7 +70,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [HttpPost]
         public ActionResult HSX(int? nam)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -90,13 +90,13 @@ namespace WineShop.Areas.Administrator.Controllers
                             TenHangSanXuat = ten.Key,
                             tong = ten.Sum(t => t.ct.GiaBan.Value * t.ct.SoLuong.Value)
                         };
-            createChart(nam.Value, "hãng sản xuất", "hãng sản xuất", _hang, "TenHangSanXuat", "hsx_chart.png", ChartTheme.Green);
+            createChart( "hãng sản xuất", "hãng sản xuất", _hang, "TenHangSanXuat", "hsx_chart.png", ChartTheme.Green);
             return PartialView("Index");
         }
 
         public ActionResult SanPham()
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -111,7 +111,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [HttpPost]
         public ActionResult SanPham(int? nam)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -130,13 +130,19 @@ namespace WineShop.Areas.Administrator.Controllers
                                TenSanPham = ten.Key,
                                tong = ten.Sum(t => t.ct.GiaBan.Value * t.ct.SoLuong.Value)
                            };
-            createChart(nam.Value, "sản phẩm", "sản phẩm", _sanpham, "TenSanPham", "sp_chart.png", ChartTheme.Vanilla);
+
+            foreach(var s in _sanpham)
+            {
+                int kn = s.tong;
+                var kk = s.TenSanPham;
+            }
+            createChart( "sản phẩm", "sản phẩm", _sanpham, "TenSanPham", "sp_chart.png", ChartTheme.Vanilla);
             return PartialView("Index");
         }
 
         public ActionResult Thang()
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -150,7 +156,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [HttpPost]
         public ActionResult Thang(int? nam)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -166,19 +172,19 @@ namespace WineShop.Areas.Administrator.Controllers
                          select new
                          {
                              Thang = g.Key,
-                             tong = g.Sum(t => t.GiaBan * t.SoLuong)
+                             tong = g.Sum(t => t.GiaBan.Value * t.SoLuong.Value)
                          };
-            createChart(nam.Value, "tháng", "tháng", _thang, "Thang", "thang_chart.png", ChartTheme.Yellow);
+            createChart("tháng", "tháng", _thang, "Thang", "thang_chart.png", ChartTheme.Yellow);
 
             return PartialView("Index");
         }
-        private void createChart(int title, string name, string axis, IQueryable<Object> values, string xField, string typeChart, string theme)
+        private void createChart( string name, string axis, IQueryable<Object> values, string xField, string typeChart, string theme)
         {
             var mChart = new Chart(Int16.Parse(Unit.Pixel(1200).Value.ToString()),
                                             Int16.Parse(Unit.Pixel(730).Value.ToString()),
                                             theme);
 
-            mChart.AddTitle("Năm " +title)
+            mChart
                 .AddSeries(
                         name: name,
                         axisLabel: axis,
