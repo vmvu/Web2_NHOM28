@@ -94,8 +94,10 @@ namespace WineShop.Areas.Administrator.Controllers
                 string logoPath = "";
                 if (upload != null && upload.ContentLength > 0)
                 {
+                    string extension = Path.GetFileNameWithoutExtension(upload.FileName);
                     string timeUTC = DateTime.Now.ToFileTimeUtc().ToString();
-                    logoPath = timeUTC + Path.GetFileName(upload.FileName);
+                    string a = upload.FileName.Replace(extension, timeUTC);
+                    logoPath = Path.GetFileName(a);
                     upload.SaveAs(Path.Combine(Server.MapPath("~/Images/Logo/") + logoPath));
                 }
                 hsxuat.BiXoa = 0;
@@ -182,16 +184,15 @@ namespace WineShop.Areas.Administrator.Controllers
             if (count == 0)
             {
                 db.HangSanXuats.Remove(xoaHangSanXuat);
-            }else
-            {
-                xoaHangSanXuat.BiXoa = 1;
+                string logoCu = Request.MapPath("~/Images/Logo/" + xoaHangSanXuat.LogoURL);
+                if (System.IO.File.Exists(logoCu))
+                {
+                    System.IO.File.Delete(logoCu);
+                }
+                db.SaveChanges();
             }
-            db.SaveChanges();
-            string logoCu = Request.MapPath("~/Images/Logo/" + xoaHangSanXuat.LogoURL);
-            if (System.IO.File.Exists(logoCu))
-            {
-                System.IO.File.Delete(logoCu);
-            }
+            
+            
             return RedirectToAction("Index");
 
         }

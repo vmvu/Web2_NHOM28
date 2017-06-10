@@ -1,7 +1,7 @@
 ﻿@model WineShop.Models.SanPham
 
 @{
-    ViewBag.Title = "ChiTiet";
+    ViewBag.Title = "Chi tiết sản phẩm";
     Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
 }
 
@@ -45,7 +45,7 @@
                             </dt>
 
                             <dd>
-                                <h3><span class="semi-bold">@Html.DisplayFor(model => model.GiaSanPham) VNĐ</span></h3>
+                                <h3><span class="semi-bold">@Model.GiaSanPham.GetValueOrDefault(0).ToString("N0") vnđ</span></h3>
                             </dd>
 
                             <dt>

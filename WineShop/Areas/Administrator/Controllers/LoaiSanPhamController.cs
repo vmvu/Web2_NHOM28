@@ -148,12 +148,10 @@ namespace WineShop.Areas.Administrator.Controllers
             if (count == 0)
             {
                 db.LoaiSanPhams.Remove(lsp);
+                db.SaveChanges();
             }
-            else
-            {
-                lsp.BiXoa = 1;
-            }
-            db.SaveChanges();
+            
+            
             return RedirectToAction("Index");
         }
     }

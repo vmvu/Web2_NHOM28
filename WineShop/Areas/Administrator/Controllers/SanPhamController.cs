@@ -8,7 +8,9 @@ using PagedList;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Net;
-
+using System.Web.Helpers;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
 namespace WineShop.Areas.Administrator.Controllers
 {
     
@@ -118,10 +120,14 @@ namespace WineShop.Areas.Administrator.Controllers
                     {
                         if (file != null && file.ContentLength > 0)
                         {
+                            string extension = Path.GetFileNameWithoutExtension(file.FileName);
                             string timeUTC = DateTime.Now.ToFileTimeUtc().ToString();
+                            string a = file.FileName.Replace(extension, timeUTC);
+
+                            String logoPath = Path.GetFileName(a);
                             var hinh = new WineShop.Models.HinhAnh
                             {
-                                TenHinh = timeUTC + Path.GetFileName(file.FileName),
+                                TenHinh = logoPath,
                                 BiXoa = false
                             };
                             file.SaveAs(Path.Combine(Server.MapPath("~/Images/"), hinh.TenHinh));
@@ -156,7 +162,7 @@ namespace WineShop.Areas.Administrator.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            SanPham sp = db.SanPhams.Where(s => s.MaSanPham == id).First<SanPham>();
+            SanPham sp = db.SanPhams.Single(s => s.MaSanPham == id.Value);
             int chiTietDonDatHangCount = sp.ChiTietDonDatHangs.Count;
             var hinhAnhList = sp.HinhAnhs;
             if (hinhAnhList.Count > 0)
@@ -168,17 +174,22 @@ namespace WineShop.Areas.Administrator.Controllers
                     {
                         System.IO.File.Delete(hinhCu);
                     }
-                    r.MaSanPham = null;
-                    r.BiXoa = true;
+                    //r.MaSanPham = null;
+                    //r.BiXoa = true;
                 }
-                foreach(var r in hinhAnhList)
+                var hinhAnhDB = db.HinhAnhs;
+                foreach(var r in hinhAnhList.ToList())
                 {
-                    hinhAnhList.Remove(r);
+                    var hinhTemp = hinhAnhDB.Single(h => h.Ma == r.Ma);
+                    if(hinhTemp != null)
+                    {
+                        db.HinhAnhs.Remove(hinhTemp);
+                    }
                 }
             }
 
 
-            if (chiTietDonDatHangCount == 0 && hinhAnhList.Count == 0)
+            if (chiTietDonDatHangCount == 0)
             {
                 db.SanPhams.Remove(sp);
             }else
@@ -291,6 +302,36 @@ namespace WineShop.Areas.Administrator.Controllers
             return View(sanpham);
         }
 
+        public FileStreamResult BaoCaoSanPham()
+        {
+            var sp = db.SanPhams.ToList<SanPham>();
+            WebGrid gird = new WebGrid(source: sp, canPage: false, canSort: false);
+            string girdHtml = gird.GetHtml(
+                columns: gird.Columns(
+                            gird.Column("MaSanPham", "STT"),
+                            gird.Column("TenSanPham", "Tên"),
+                            gird.Column("SoLuongTon", "SL")
+                            )
+                            ).ToString();
+            string exportData = string.Format("<html><head><meta charset="+"utf - 8"+"/>{0}</head><body>{1}</body></html>", "<style>table{border-spacing:10px; border-collapse:separate;}</style>", girdHtml);
+            var bytes = System.Text.Encoding.UTF8.GetBytes(exportData);
+            using (var input = new MemoryStream(bytes))
+            {
+                var output = new MemoryStream();
+                var document = new iTextSharp.text.Document(PageSize.A4, 50, 50, 50, 50);
+                var writer = PdfWriter.GetInstance(document, output);
+                writer.CloseStream = false;
+
+                document.Open();
+
+                var xmlWorker = iTextSharp.tool.xml.XMLWorkerHelper.GetInstance();
+                xmlWorker.ParseXHtml(writer, document, input, System.Text.Encoding.UTF8);
+                document.Close();
+                output.Position = 0;
+                return new FileStreamResult(output, "application/pdf");
+            }
+
+        }
     }
 
 }
