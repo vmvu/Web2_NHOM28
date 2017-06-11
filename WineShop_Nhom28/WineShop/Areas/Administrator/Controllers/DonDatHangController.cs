@@ -15,7 +15,7 @@ namespace WineShop.Areas.Administrator.Controllers
         // GET: Administrator/DonDatHang
         public ActionResult Index(string sortOrder, string currentFilter, string TimDonDatHang, int? page)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -55,7 +55,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ChiTiet(string id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -70,7 +70,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult CapNhat(string id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -88,7 +88,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CapNhat([Bind(Include ="MaDonDatHang, GhiChu, MaTinhTrang")]DonDatHang dondathang)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }

@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách khách hàng";
     Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,10 +23,8 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
 
         @foreach (var item in Model)
         {
-            foreach (var role in item.AspNetRoles)
-            {
-                if (role.Id.Equals("1"))
-                {
+                //if (role.Id.Equals("1"))
+                //{
                     <tr>
                         <td>
                             <h4 style="margin-left:100px">@Html.DisplayFor(modelItem => item.UserName)</h4>
@@ -43,11 +41,7 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
                             </a>
                         </td>
                     </tr>
-                }
-            }
-
-
-
+                //}
         }
 
     </table>

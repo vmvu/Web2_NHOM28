@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách đơn đặt hàng";
     Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
 }
 
@@ -48,7 +48,7 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
                     <h4>@item.NgayLap.Value.ToShortDateString()</h4>
                 </td>
                 <td width="150">
-                    <h4>@Html.DisplayFor(modelItem => item.TongThanhTien)</h4>
+                    <h4>@item.TongThanhTien.GetValueOrDefault(0).ToString("N0") vnđ</h4>
                 </td>
                 <td width="200">
                     <h4>@Html.DisplayFor(modelItem => item.TinhTrang.TenTinhTrang)</h4>

@@ -27,12 +27,12 @@ namespace WineShop.Areas.Administrator.Controllers
             {
                 return RedirectToAction("Index", "DangNhap");
             }
-            Session["DangNhap"] = "true";
+            Session["DangNhapAdmin"] = "true";
             return RedirectToAction("Index", "SanPham");
         }
         public ActionResult Thoat()
         {
-            Session["DangNhap"] = null;
+            Session["DangNhapAdmin"] = null;
             return RedirectToAction("Index", "DangNhap");
         }
         public static bool VerifyHashedPassword(string hashedPassword, string password)

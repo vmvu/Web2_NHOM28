@@ -16,7 +16,7 @@ namespace WineShop.Areas.Administrator.Controllers
         // GET: Administrator/KhachHang
         public ActionResult Index(string sortOrder, string currentFilter, string TimKhachHang, int? page)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -24,7 +24,7 @@ namespace WineShop.Areas.Administrator.Controllers
             ViewBag.CurrentFilter = sortOrder;
             ViewBag.TenKhachHangs = string.IsNullOrEmpty(sortOrder) ? "khachhang" : "khachhang_desc";
 
-            var kh = db.AspNetUsers.Where(h => h.LockoutEnabled == false );
+            var kh = db.AspNetUsers.Where(h => h.LockoutEnabled == true && !h.Id.Equals("minda-admin-min-ad") );
       
             if (sortOrder != null && sortOrder.Equals("khachhang_desc"))
             {
@@ -55,7 +55,7 @@ namespace WineShop.Areas.Administrator.Controllers
         }
         public ActionResult PhanQuyen(string id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -85,7 +85,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [HttpPost]
         public ActionResult PhanQuyen([Bind(Include = "Id")]AspNetUser user, string RoleID)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -130,7 +130,7 @@ namespace WineShop.Areas.Administrator.Controllers
         }
         public ActionResult HuyPhanQuyen(string id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -146,7 +146,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [HttpPost]
         public ActionResult HuyPhanQuyen([Bind(Include = "Id")]AspNetUser user, string RoleID)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -180,7 +180,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult Xoa([Bind(Include = "Id")]AspNetUser user)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -188,32 +188,16 @@ namespace WineShop.Areas.Administrator.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var kh = db.AspNetUsers.Single<AspNetUser>(h => h.Id == user.Id);
+            var kh = db.AspNetUsers.Single<AspNetUser>(h => h.Id.Equals(user.Id));
             
-            int donDatHangCount = kh.DonDatHangs.Count;
-            int quyenCount = kh.AspNetRoles.Count;
-            if(donDatHangCount == 0 && quyenCount == 1 )
+            var ddh = db.DonDatHangs.Find(kh.Id);
+            if(ddh == null)
             {
-                // do trong chỉ có 1 row trong bảng mối quan hệ nhiều - nhiều
-                // nên có thể lấy bằng lệnh Single
-                // mục đích lấy đc Id  mà ApsNetRole
-                var xoaQuyen = kh.AspNetRoles.Single();
-                
-                AspNetUserRoles a = new AspNetUserRoles();
-                //tìm trong bảng phụ khách hàng
-                var _khachhang = a.Users.Find(kh.Id);
-                // tìm 1 quyền duy nhất của khách hàng
-                var _quyen = a.Roles.Find(xoaQuyen.Id);
-                // xóa khách hàng ra khỏi bảng phụ
-                _quyen.AspNetUsers.Remove(_khachhang);
-                // save lại bảng phụ
-                a.SaveChanges();
-                // lúc này khách hàng đã hết Role nên có thể xóa.
                 db.AspNetUsers.Remove(kh);
             }else
             {
                 // nếu khách hàng có đơn hàng -> xóa ẩn
-                kh.LockoutEnabled = true;
+                kh.LockoutEnabled = false;
             }
             db.SaveChanges();
             return RedirectToAction("Index");

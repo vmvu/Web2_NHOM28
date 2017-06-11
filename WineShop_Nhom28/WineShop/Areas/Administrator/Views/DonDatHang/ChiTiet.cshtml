@@ -1,7 +1,7 @@
 ﻿@model WineShop.Models.DonDatHang
 
 @{
-    ViewBag.Title = "ChiTiet";
+    ViewBag.Title = "Chi tiết đơn đặt hãng";
     Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
 }
 
@@ -54,7 +54,7 @@
 
                         <dd>
 
-                            <h3><span class="semi-bold">@Html.DisplayFor(model => model.TongThanhTien)</span></h3>
+                            <h3><span class="semi-bold">@Model.TongThanhTien.GetValueOrDefault(0).ToString("N0") vnđ</span></h3>
                         </dd>
 
                         <dt>
@@ -117,13 +117,13 @@
                         <tr>
                             <td>@item.SanPham.TenSanPham</td>
                             <td>@item.SoLuong.Value</td>
-                            <td>@item.GiaBan.Value</td>
+                            <td>@item.GiaBan.GetValueOrDefault(0).ToString("N0") vnđ</td>
                         </tr>
                     }
                     <tr>
                         <td></td>
                         <td><b>Tổng tiền =</b></td>
-                        <td>@Model.TongThanhTien</td>
+                        <td>@Model.TongThanhTien.GetValueOrDefault(0).ToString("N0") vnđ</td>
                         <td width="0" hidden></td>
                     </tr>
                 </table>

@@ -3,7 +3,7 @@
 
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Danh sách sản phẩm";
     Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,7 +23,11 @@
     <div class="clearfix"></div>
 </div>
 <br />
+<a href="@Url.Action("BaoCaoSanPham", "SanPham")">
+    Xuất báo cáo: <img src="~/Areas/Administrator/Content/assets/img/baocao.png" width="50" height="60" />
+</a>
 
+<br/>
 Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 <div style="background-color:white">
@@ -90,7 +94,7 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
                 </td>
                 <td>
                     <h4>
-                        @Html.DisplayFor(modelItem => item.GiaSanPham)
+                        @item.GiaSanPham.GetValueOrDefault(0).ToString("N0")
                     </h4>
                 </td>
                 <td>

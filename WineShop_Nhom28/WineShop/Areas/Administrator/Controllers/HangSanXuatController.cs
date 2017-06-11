@@ -16,7 +16,7 @@ namespace WineShop.Areas.Administrator.Controllers
         // GET: Administrator/HangSanXuat
         public ActionResult Index(string sortOrder, string currentFilter, string TimHangSanXuat, int? page)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -60,7 +60,7 @@ namespace WineShop.Areas.Administrator.Controllers
         }
         public ActionResult ChiTiet(int? id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -74,7 +74,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ThemMoi()
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -85,7 +85,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ThemMoi([Bind(Include = "TenHangSanXuat")]HangSanXuat hsxuat, HttpPostedFileBase upload)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -94,8 +94,10 @@ namespace WineShop.Areas.Administrator.Controllers
                 string logoPath = "";
                 if (upload != null && upload.ContentLength > 0)
                 {
+                    string extension = Path.GetFileNameWithoutExtension(upload.FileName);
                     string timeUTC = DateTime.Now.ToFileTimeUtc().ToString();
-                    logoPath = timeUTC + Path.GetFileName(upload.FileName);
+                    string a = upload.FileName.Replace(extension, timeUTC);
+                    logoPath = Path.GetFileName(a);
                     upload.SaveAs(Path.Combine(Server.MapPath("~/Images/Logo/") + logoPath));
                 }
                 hsxuat.BiXoa = 0;
@@ -109,7 +111,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult CapNhat(int? id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -126,7 +128,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CapNhat([Bind(Include = "MaHangSanXuat, TenHangSanXuat")]HangSanXuat hsxuat, HttpPostedFileBase upload)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -168,7 +170,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult Xoa(int? id)
         {
-            if (Session["DangNhap"] == null || !Session["DangNhap"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -182,16 +184,15 @@ namespace WineShop.Areas.Administrator.Controllers
             if (count == 0)
             {
                 db.HangSanXuats.Remove(xoaHangSanXuat);
-            }else
-            {
-                xoaHangSanXuat.BiXoa = 1;
+                string logoCu = Request.MapPath("~/Images/Logo/" + xoaHangSanXuat.LogoURL);
+                if (System.IO.File.Exists(logoCu))
+                {
+                    System.IO.File.Delete(logoCu);
+                }
+                db.SaveChanges();
             }
-            db.SaveChanges();
-            string logoCu = Request.MapPath("~/Images/Logo/" + xoaHangSanXuat.LogoURL);
-            if (System.IO.File.Exists(logoCu))
-            {
-                System.IO.File.Delete(logoCu);
-            }
+            
+            
             return RedirectToAction("Index");
 
         }
