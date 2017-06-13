@@ -15,7 +15,7 @@ namespace WineShop.Areas.Administrator.Controllers
         ShopRuouDBEntities db = new ShopRuouDBEntities();
         public ActionResult Index(string sortOrder, string currentFilter, string TimLoaiSanPham, int? page)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -60,7 +60,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ChiTiet(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -75,7 +75,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult CapNhat(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -93,7 +93,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CapNhat([Bind(Include = "MaLoaiSanPham, TenLoaiSanPham")]LoaiSanPham lsp)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -108,7 +108,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ThemMoi()
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -119,7 +119,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ThemMoi([Bind(Include = "TenLoaiSanPham")]LoaiSanPham lsp)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -135,7 +135,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult Xoa(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }

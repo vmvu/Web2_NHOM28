@@ -89,7 +89,7 @@
                                     <i class="material-icons">refresh</i>
                                 </a>
                             }
-                            @if (Session["a"] != null && Session["a"].ToString().Equals("KhachHang"))
+                            @if (Session["a"] != null && Session["a"].ToString().Equals("KhachHang") && Session["DangNhapAdmin"] != null && Session["DangNhapAdmin"].ToString().Equals("boss"))
                             {
                                 <a href="@Url.Action("Index", "KhachHang", null)" class="">
                                     <i class="material-icons">refresh</i>
@@ -143,7 +143,7 @@
                                     <input name="TimDonDatHang" type="text" class="no-boarder " placeholder="Tìm kiếm" style="width:250px;">
                                 }
                             }
-                            @if (Session["a"] != null && Session["a"].ToString() == "KhachHang")
+                            @if (Session["a"] != null && Session["a"].ToString() == "KhachHang" && Session["DangNhapAdmin"] != null && Session["DangNhapAdmin"].ToString().Equals("boss"))
                             {
                                 using (Html.BeginForm("Index", "KhachHang", FormMethod.Get))
                                 {
@@ -257,11 +257,15 @@
                             <i class="fa fa-shopping-cart"></i> <span class="title">ĐƠN ĐẶT HÀNG</span>
                         </a>
                     </li>
-                    <li class="">
-                        <a href="@Url.Action("Index", "KhachHang", null)">
-                            <i class="fa fa-user"></i> <span class="title">KHÁCH HÀNG</span>
-                        </a>
-                    </li>
+                    @if (Session["DangNhapAdmin"] != null && Session["DangNhapAdmin"].ToString().Equals("boss"))
+                    {
+                        <li class="">
+                            <a href="@Url.Action("Index", "KhachHang", null)">
+                                <i class="fa fa-user"></i> <span class="title">KHÁCH HÀNG</span>
+                            </a>
+                        </li>
+                    }
+                    
                     <li class="hidden-lg hidden-md hidden-xs" id="more-widgets">
                         <a href="javascript:;"> <i class="material-icons"></i></a>
                         <ul class="sub-menu">

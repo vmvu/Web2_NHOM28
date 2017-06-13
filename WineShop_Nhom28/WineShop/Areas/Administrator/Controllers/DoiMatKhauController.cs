@@ -21,7 +21,7 @@ namespace WineShop.Areas.Administrator.Controllers
         // GET: Administrator/DoiMatKhau
         public ActionResult Index()
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -33,7 +33,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(ChangePasswordViewModel model)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
