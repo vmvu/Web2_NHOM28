@@ -30,7 +30,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 
@@ -58,7 +58,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
                 return RedirectToAction("Index", "DangNhap");
@@ -110,7 +110,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 
@@ -138,7 +138,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 
@@ -190,7 +190,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 
@@ -220,7 +220,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 
@@ -282,7 +282,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 
@@ -310,7 +310,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         {
 
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
 
             {
 

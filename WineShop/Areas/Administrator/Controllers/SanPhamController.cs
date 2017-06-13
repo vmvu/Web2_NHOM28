@@ -21,7 +21,7 @@ namespace WineShop.Areas.Administrator.Controllers
         
         public ActionResult Index(string sortOrder, string currentFilter, string TimSanPham, int? page)
         {
-            if(Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if(Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -78,7 +78,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ChiTiet(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -92,7 +92,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ThemMoi()
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -107,7 +107,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ThemMoi([Bind(Include = "MaSanPham, TenSanPham, GiaSanPham, NgayNhap, MoTa,SoLuongTon, MaLoaiSanPham, MaHangSanXuat, Hinh")] SanPham sanpham, IEnumerable<HttpPostedFileBase> upload)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -153,7 +153,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult Xoa(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -203,7 +203,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult CapNhat(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -224,7 +224,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CapNhat([Bind(Include = "MaSanPham, TenSanPham, GiaSanPham, NgayNhap, SoLuongTon, MoTa, MaLoaiSanPham, MaHangSanXuat")] SanPham sanpham, IEnumerable<HttpPostedFileBase> upload, IEnumerable<String> GiaTri)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }

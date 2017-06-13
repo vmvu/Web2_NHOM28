@@ -21,13 +21,20 @@ namespace WineShop.Areas.Administrator.Controllers
         {
             ShopRuouDBEntities db = new ShopRuouDBEntities ();
             
-            var result = db.AspNetUsers.Single(r => r.Id.Equals("minda-admin-min-ad"));
+            var result = db.AspNetUsers.Single(r => r.Email.Equals(username.Trim()));
+            AspNetUserRoles a = new AspNetUserRoles();
+            var tk = a.Users.Find(result.Id);
+            var quyen = tk.AspNetRoles.SingleOrDefault();
             bool check = VerifyHashedPassword(result.PasswordHash, password);
-            if(!check)
+            if(!check || !quyen.Id.Equals("2"))
             {
                 return RedirectToAction("Index", "DangNhap");
             }
             Session["DangNhapAdmin"] = "true";
+            if (result.Id.Equals("minda-admin-min-ad"))
+            {
+                Session["DangNhapAdmin"] = "boss";
+            }
             return RedirectToAction("Index", "SanPham");
         }
         public ActionResult Thoat()

@@ -16,7 +16,7 @@ namespace WineShop.Areas.Administrator.Controllers
         // GET: Administrator/HangSanXuat
         public ActionResult Index(string sortOrder, string currentFilter, string TimHangSanXuat, int? page)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -60,7 +60,7 @@ namespace WineShop.Areas.Administrator.Controllers
         }
         public ActionResult ChiTiet(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -74,7 +74,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult ThemMoi()
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -85,7 +85,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ThemMoi([Bind(Include = "TenHangSanXuat")]HangSanXuat hsxuat, HttpPostedFileBase upload)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -111,7 +111,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult CapNhat(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -128,7 +128,7 @@ namespace WineShop.Areas.Administrator.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CapNhat([Bind(Include = "MaHangSanXuat, TenHangSanXuat")]HangSanXuat hsxuat, HttpPostedFileBase upload)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }
@@ -170,7 +170,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public ActionResult Xoa(int? id)
         {
-            if (Session["DangNhapAdmin"] == null || !Session["DangNhapAdmin"].ToString().Equals("true"))
+            if (Session["DangNhapAdmin"] == null)
             {
                 return RedirectToAction("Index", "DangNhap");
             }

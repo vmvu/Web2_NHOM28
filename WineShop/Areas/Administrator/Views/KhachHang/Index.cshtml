@@ -15,9 +15,10 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
             <th>
                 <center>Tên đăng nhập</center>
             </th>
-            @*<th>
+            <th>
                 Quyền hiện tại
-            </th>*@
+            </th>
+            <th></th>
             <th></th>
         </tr>
 
@@ -29,16 +30,21 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
                         <td>
                             <h4 style="margin-left:100px">@Html.DisplayFor(modelItem => item.UserName)</h4>
                         </td>
-                        @*<td>
-
-                            @Html.DropDownList("Name", new SelectList(item.AspNetRoles.Select(r => r.Name)))
-                        </td>*@
                         <td>
-                            @*@Html.ActionLink("Phân quyền", "PhanQuyen", new { id = item.Id }) |
-                            @Html.ActionLink("Hủy quyền", "HuyPhanQuyen", new { id = item.Id }) |*@
-                            <a class="remove" href="@Url.Action("Xoa", "KhachHang", new { id = item.Id})">
-                                <h1><i class="fa fa-times"></i></h1>
+                            @item.AspNetRoles.Single().Name
+                        </td>
+                        <td>
+                            <a class="remove" href="@Url.Action("CapNhat", "KhachHang", new { id = item.Id})">
+                                Cập nhật
                             </a>
+                        </td>
+                        <td>
+                            @if (item.LockoutEnabled == true)
+                            {
+                                <a class="remove" href="@Url.Action("Xoa", "KhachHang", new { id = item.Id})">
+                                    <h1><i class="fa fa-times"></i></h1>
+                                </a>
+                            }
                         </td>
                     </tr>
                 //}
