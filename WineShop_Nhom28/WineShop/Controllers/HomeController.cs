@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,24 +11,23 @@ namespace WineShop.Controllers
     {
         public ActionResult Index()
         {
-            Session["a"] = "TrangChu";
+            Session["BiKhoa"] = null;
+            string MaTK = null;
+            MaTK = User.Identity.GetUserId();
+            if (MaTK != null)
+            {
+                Session["DangNhap"] = "1";
+            }
             return View();
         }
 
         public ActionResult HienThiThongTin()
         {
-            Session["a"] = "ThongTin";
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult HienThiLienHe()
         {
-            Session["a"] = "LienHe";
-
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
