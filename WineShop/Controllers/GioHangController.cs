@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 
 namespace WineShop.Controllers
 {
+    [Authorize]
     public class GioHangController : Controller
     {
         ShopRuouDBEntities db = new ShopRuouDBEntities();
@@ -18,6 +19,12 @@ namespace WineShop.Controllers
         // GET: GioHang
         public ActionResult Index()
         {
+            Session["a"] = "GioHang";
+
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
 
             var cart = Session[CartSession];
 
@@ -29,19 +36,29 @@ namespace WineShop.Controllers
 
             return View(list);
         }
-        [HttpPost]
+
+        [HttpGet]
         public ActionResult Nhap(int? id, int? Soluong)
         {
-
-            if (Soluong != null && Soluong > 0 && Soluong < db.SanPhams.Single(s => s.MaSanPham == id && s.BiXoa == 0).SoLuongTon)
+            if (Session["BiKhoa"] != null)
             {
-                return RedirectToAction("AddItem", "GioHang", new { id = id , sl = Soluong});
+                return RedirectToAction("LogOffs", "Account");
+            }
+
+            if (Soluong != null && Soluong > 0 && Soluong <= db.SanPhams.Single(s => s.MaSanPham == id && s.BiXoa == 0).SoLuongTon)
+            {
+                return RedirectToAction("AddItem", "GioHang", new { id = id, sl = Soluong });
             }
             return RedirectToAction("HienThiChiTietSanPham", "SanPhams", new { id = id });
         }
 
         public ActionResult AddItem(int id, int sl)
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
             var cart = Session[CartSession];
             if (cart != null)
             {
@@ -52,7 +69,16 @@ namespace WineShop.Controllers
                     {
                         if (item.sanpham.MaSanPham == id)
                         {
-                            item.soluong += sl;
+                            int bientam = 0;
+                            bientam = item.soluong + sl;
+                            if (item.sanpham.SoLuongTon >= bientam)
+                            {
+                                item.soluong += sl;
+                            }
+                            else
+                            {
+                                return RedirectToAction("HienThiChiTietSanPham", "SanPhams", new { id = id });
+                            }
                         }
                     }
                 }
@@ -81,14 +107,34 @@ namespace WineShop.Controllers
 
         public ActionResult LichSuGiaoHang()
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
             string IDKH = null;
             IDKH = User.Identity.GetUserId();
             List<DonDatHang> lst = db.DonDatHangs.Where(i => i.UserID == IDKH).ToList<DonDatHang>();
             return View(lst);
         }
 
+        public ActionResult ChiTietDH(string maddh)
+        {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
+            List<ChiTietDonDatHang> lst = db.ChiTietDonDatHangs.Where(i => i.MaDonDatHang == maddh).ToList<ChiTietDonDatHang>();
+            return View(lst);
+        }
+
         public ActionResult HuyDonHang(string maddh)
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
 
             List<ChiTietDonDatHang> lst = db.ChiTietDonDatHangs.Where(i => i.MaDonDatHang == maddh).ToList<ChiTietDonDatHang>();
             DonDatHang ddh = db.DonDatHangs.Single(d => d.MaDonDatHang == maddh);
@@ -106,6 +152,11 @@ namespace WineShop.Controllers
 
         public ActionResult XoaSP(int id)
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
             var sessionCart = (List<CartItem>)Session[CartSession];
             sessionCart.RemoveAll(x => x.sanpham.MaSanPham == id);
             Session[CartSession] = sessionCart;
@@ -114,6 +165,11 @@ namespace WineShop.Controllers
 
         public ActionResult TangSL(int id, int sl)
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
             var sessionCart = (List<CartItem>)Session[CartSession];
             foreach (var item in sessionCart)
             {
@@ -128,6 +184,11 @@ namespace WineShop.Controllers
 
         public ActionResult GiamSL(int id, int sl)
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
             var sessionCart = (List<CartItem>)Session[CartSession];
             foreach (var item in sessionCart)
             {
@@ -143,6 +204,11 @@ namespace WineShop.Controllers
         [HttpPost]
         public ActionResult ThanhToan(int tongtien, string GhiChu)
         {
+            if (Session["BiKhoa"] != null)
+            {
+                return RedirectToAction("LogOffs", "Account");
+            }
+
             //Tạo đơn đặt hàng
             string strID = null;
             strID = User.Identity.GetUserId();
@@ -164,13 +230,15 @@ namespace WineShop.Controllers
             var cart = (List<CartItem>)Session[CartSession];
             int slct = 0;
             string Mactdh = null;
+            int k = 1;
             foreach (var item in cart)
             {
                 ct = new ChiTietDonDatHang();
-                slct = db.ChiTietDonDatHangs.Count();
-                Mactdh = "CTDH" + slct + 1;
+                slct = db.ChiTietDonDatHangs.Count();               
+                slct += k;
+                k++;
+                Mactdh = "CTDH" + k;
                 ct.MaChiTietDonDatHang = Mactdh;
-                ct.MaDonDatHang = ddh.MaDonDatHang;
                 ct.SoLuong = item.soluong;
                 ct.GiaBan = item.sanpham.GiaSanPham * ct.SoLuong;
                 ct.MaSanPham = item.sanpham.MaSanPham;

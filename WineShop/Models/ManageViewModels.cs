@@ -41,20 +41,20 @@ namespace WineShop.Models
 
     public class ChangePasswordViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Bạn chưa điền thông tin mật khẩu cũ.")]
         [DataType(DataType.Password)]
         [Display(Name = "Current password")]
         public string OldPassword { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Độ dài mật khẩu phải từ {0} đến {2} ký tự.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "New password")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Compare("NewPassword", ErrorMessage = "Mật khẩu và nhắc lại mật khẩu của bạn không khớp nhau.")]
         public string ConfirmPassword { get; set; }
     }
 

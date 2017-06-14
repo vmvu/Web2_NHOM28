@@ -180,19 +180,27 @@ namespace WineShop.Areas.Administrator.Controllers
             }
             var xoaHangSanXuat = db.HangSanXuats.Where(h => h.MaHangSanXuat == id).First<HangSanXuat>();
             int count = xoaHangSanXuat.SanPhams.Count;
+            int countXoaAn = xoaHangSanXuat.SanPhams.Where(s => s.BiXoa == 1).Count();
             // hãng sản xuất không có sản phẩm
             if (count == 0)
             {
-                db.HangSanXuats.Remove(xoaHangSanXuat);
+                db.HangSanXuats.Remove(xoaHangSanXuat);   
+            }
+            if(count == countXoaAn)
+            {
+                xoaHangSanXuat.BiXoa = 1;
+            }
+            int n = db.SaveChanges();
+            if(n > 0)
+            {
                 string logoCu = Request.MapPath("~/Images/Logo/" + xoaHangSanXuat.LogoURL);
                 if (System.IO.File.Exists(logoCu))
                 {
                     System.IO.File.Delete(logoCu);
                 }
-                db.SaveChanges();
             }
-            
-            
+
+
             return RedirectToAction("Index");
 
         }

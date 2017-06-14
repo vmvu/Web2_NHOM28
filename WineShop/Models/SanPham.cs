@@ -38,7 +38,7 @@ namespace WineShop.Models
         [DataType(DataType.Date)]
         public Nullable<System.DateTime> NgayNhap { get; set; }
         [Display(Name = "Sô lượng")]
-        [RegularExpression("([1-9][0-9]*)", ErrorMessage = "Cần nhập số nguyên")]
+        [RegularExpression("([0-9][0-9]*)", ErrorMessage = "Cần nhập số nguyên")]
         [Required(ErrorMessage = "Cần nhập số nguyên")]
         public Nullable<int> SoLuongTon { get; set; }
         [Display(Name = "Số lượng đã bán")]

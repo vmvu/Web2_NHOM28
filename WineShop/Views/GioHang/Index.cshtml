@@ -9,7 +9,7 @@
     <div class="container" id="columns">
 
         <div class="breadcrumb clearfix">
-            <a style="text-decoration:none;" class="home" href="#" title="Trở về trang chủ">Trang chủ</a>
+            <a style="text-decoration:none;" class="home" href="/" title="Trở về trang chủ">Trang chủ</a>
             <span class="navigation-pipe">&nbsp;</span>
             <span class="navigation_page">Giỏ hàng</span>
         </div>
@@ -54,7 +54,7 @@
                                     </td>
                                     <td class="price"><span>@item.sanpham.GiaSanPham.GetValueOrDefault(0).ToString("N0") VNĐ</span></td>
                                     <td class="qty">
-                                        <input class="form-control input-sm" type="text" value="@item.soluong">
+                                        <input class="form-control input-sm" type="text" value="@item.soluong" readonly>
                                         <a style="text-decoration:none;" href="@Url.Action("TangSL", "GioHang", new { id = @item.sanpham.MaSanPham, sl = @item.soluong})"><i class="fa fa-caret-up"></i></a>
                                         <a style="text-decoration:none;" href="@Url.Action("GiamSL", "GioHang", new { id = @item.sanpham.MaSanPham, sl = @item.soluong})"><i class="fa fa-caret-down"></i></a>
                                     </td>
@@ -62,7 +62,7 @@
                                         <span>@((item.sanpham.GiaSanPham.GetValueOrDefault(0) * @item.soluong).ToString("N0")) VNĐ</span>
                                     </td>
                                     <td class="action">
-                                        <a style="text-decoration:none;" href="@Url.Action("XoaSP", "GioHang", new { id = @item.sanpham.MaSanPham})">Delete item</a>
+                                        <a style="text-decoration:none;" href="@Url.Action("XoaSP", "GioHang", new { id = @item.sanpham.MaSanPham})"><img src="~/assets/images/del.png" width="15" /></a>
                                     </td>
                                 </tr>
                             }

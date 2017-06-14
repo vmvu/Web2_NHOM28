@@ -14,6 +14,7 @@
                             <th>Ngày lập</th>
                             <th>Tổng tiền</th>
                             <th>Tình Trạng</th>
+                            <th>Chi tiết</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -26,7 +27,7 @@
                                 <td class="cart_description">
                                     <p class="product-name">@item.NgayLap</p>
                                 </td>
-                                <td class="price"><span>@item.TongThanhTien</span></td>
+                                <td class="price"><span>@item.TongThanhTien.GetValueOrDefault(0).ToString("N0")</span></td>
                                 @if (item.MaTinhTrang == 1)
                                 {
                                     <td>
@@ -39,6 +40,9 @@
                                         @item.TinhTrang.TenTinhTrang
                                     </td>
                                 }
+                                <td>
+                                        <a style="text-decoration:none;" href="@Url.Action("ChiTietDH", "GioHang", new { maddh = @item.MaDonDatHang })">Chi tiết đơn đặt hàng</a>
+                                    </td>
                             </tr>
                         }
                     </tbody>

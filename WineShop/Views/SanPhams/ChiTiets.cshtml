@@ -2,17 +2,6 @@
 
 <div class="columns-container">
     <div class="container" id="columns">
-        <!-- breadcrumb -->
-        @*<div class="breadcrumb clearfix">
-                <a class="home" href="#" title="Return to Home" style="text-decoration: none;">Trang chủ</a>
-                <span class="navigation-pipe">&nbsp;</span>
-                <a href="#" title="Return to Home" style="text-decoration: none;">Vang trắng</a>
-                <span class="navigation-pipe">&nbsp;</span>
-                <a href="#" title="Return to Home" style="text-decoration: none;">Vang trắng Chile</a>
-                <span class="navigation-pipe">&nbsp;</span>
-                <a href="#" title="Return to Home" style="text-decoration: none;">Rượu vang Morande Gran Reserva – Chile</a>
-            </div>*@
-        <!-- ./breadcrumb -->
         <!-- row -->
         <div class="row">
             @{ var item = Model;}
@@ -27,7 +16,7 @@
                                 <div class="product-full">
                                     @foreach (var h in item.HinhAnhs)
                                     {
-                                        <img id="product-zoom" src="~/Images/@h.TenHinh" />
+                                        <img id="product-zoom" src="~/Images/@h.TenHinh" width="500" height="400"/>
                                         break;
                                     }
                                 </div>
@@ -44,7 +33,7 @@
                                         {
                                             <li>
                                                 <a href="SanPhams/HienThiChiTietSanPham/@hinh.MaSanPham">
-                                                    <img src="@Url.Content("~/Images/" + hinh.TenHinh)" alt="@hinh.TenHinh" width="50" height="100" />
+                                                    <img src="@Url.Content("~/Images/" + hinh.TenHinh)" alt="@hinh.TenHinh" height="150" />
                                                 </a>
                                             </li>
                                         }
@@ -54,16 +43,14 @@
                             <!-- product-imge-->
                         </div>
                         <div class="pb-right-column col-xs-12 col-sm-7">
-                            @using (Html.BeginForm("Nhap", "GioHang"))
+                            @using (Html.BeginForm("Nhap", "GioHang", FormMethod.Get))
                             {
                                 <h1 class="product-name">@item.TenSanPham</h1>
 
                                 <div class="product-price-group">
-                                    <span class="price">@item.GiaSanPham VNĐ</span>
+                                    <span class="price">@item.GiaSanPham.GetValueOrDefault(0).ToString("N0") VNĐ</span>
                                 </div>
-                                    <div class="info-orther">
-                                        <p>Mã Sản Phẩm: @item.MaSanPham</p>
-
+                                    <div class="info-orther">                                       
                                         <p>Xuất Xứ: Chile</p>
                                     </div>
                                     <div class="product-desc">
@@ -130,4 +117,16 @@
         </div>
     </div>
 </div>
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.9&appId=1770232879954779";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<center><div class="fb-comments" data-href="@Request.Url.AbsoluteUri" data-numposts="5"></div></center>
 @{ Html.RenderAction("SanPhamCungLoai", "SanPhams");}
+

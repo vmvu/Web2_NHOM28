@@ -251,16 +251,17 @@ namespace WineShop.Areas.Administrator.Controllers
                         {
                             System.IO.File.Delete(hinhCu);
                         }
-                        ha.BiXoa = true;
-                        ha.MaSanPham = null;
+                        //ha.BiXoa = true;
+                        //ha.MaSanPham = null;
                     }
+                    var hinhAndList = db.HinhAnhs.ToList();
                     foreach(var r in GiaTri)
                     {
-                        HinhAnh ha = listHinhAnh.Single(h => h.Ma == Int16.Parse(r));
-                        listHinhAnh.Remove(ha);
+                        int maHinh = Int16.Parse(r);
+                        HinhAnh ha = hinhAndList.Single(h=>h.Ma == maHinh);
+                        db.HinhAnhs.Remove(ha);
                     }
                 }
-                
 
                 var hinhanh = new List<HinhAnh>();
 
@@ -304,7 +305,7 @@ namespace WineShop.Areas.Administrator.Controllers
 
         public FileStreamResult BaoCaoSanPham()
         {
-            var sp = db.SanPhams.ToList<SanPham>();
+            var sp = db.SanPhams.Where(s=>s.BiXoa == 0).ToList<SanPham>();
             WebGrid gird = new WebGrid(source: sp, canPage: false, canSort: false);
             string girdHtml = gird.GetHtml(
                 columns: gird.Columns(

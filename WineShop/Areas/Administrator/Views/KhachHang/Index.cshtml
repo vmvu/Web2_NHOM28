@@ -6,14 +6,14 @@
     Layout = "~/Areas/Administrator/Views/Shared/_Layout.cshtml";
 }
 
-<center><h1>KHÁCH HÀNG</h1></center>
+<center><h1>TÀI KHOẢN</h1></center>
 Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 <div style="background-color:white;">
     <table class="table table-hover no-more-tables">
         <tr>
             <th>
-                <center>Tên đăng nhập</center>
+                Tên đăng nhập
             </th>
             <th>
                 Quyền hiện tại
@@ -34,16 +34,16 @@ Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) của @Model.
                             @item.AspNetRoles.Single().Name
                         </td>
                         <td>
-                            <a class="remove" href="@Url.Action("CapNhat", "KhachHang", new { id = item.Id})">
-                                Cập nhật
-                            </a>
+                                <a class="remove" href="@Url.Action("CapNhat", "KhachHang", new { id = item.Id})">
+                                    <h1><i class="fa fa-retweet"></i></h1>
+                                </a>
                         </td>
                         <td>
                             @if (item.LockoutEnabled == true)
                             {
-                                <a class="remove" href="@Url.Action("Xoa", "KhachHang", new { id = item.Id})">
-                                    <h1><i class="fa fa-times"></i></h1>
-                                </a>
+                                    <a class="remove" href="@Url.Action("Xoa", "KhachHang", new { id = item.Id})">
+                                        <h1><i class="fa fa-times"></i></h1>
+                                    </a>
                             }
                         </td>
                     </tr>

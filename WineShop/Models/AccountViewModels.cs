@@ -69,6 +69,25 @@ namespace WineShop.Models
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Bạn chưa nhập mật khẩu.")]
+        [StringLength(100, ErrorMessage = "Độ dài mật khẩu phải từ {0} đến {2} ký tự.", MinimumLength = 6)]
+        [DataType(DataType.Password, ErrorMessage = "Mật khẩu chưa đủ mạnh.")]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password, ErrorMessage = "Mật khẩu chưa đủ mạnh.")]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "Mật khẩu và nhắc lại mật khẩu của bạn không khớp nhau.")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        [Required(ErrorMessage = "Bạn chưa điền thông tin Email.")]
+        [EmailAddress(ErrorMessage = "Địa chỉ Email không hợp lệ.")]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "Độ dài mật khẩu phải từ {0} đến {2} ký tự.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -79,33 +98,14 @@ namespace WineShop.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Mật khẩu và nhắc lại mật khẩu của bạn không khớp nhau.")]
         public string ConfirmPassword { get; set; }
-    }
-
-    public class ResetPasswordViewModel
-    {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }
     }
 
     public class ForgotPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Bạn chưa điền thông tin Email.")]
+        [EmailAddress(ErrorMessage = "Địa chỉ Email không hợp lệ.")]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }

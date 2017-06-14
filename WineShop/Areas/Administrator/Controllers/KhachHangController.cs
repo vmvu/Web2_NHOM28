@@ -194,7 +194,11 @@ namespace WineShop.Areas.Administrator.Controllers
                 // nếu khách hàng có đơn hàng -> xóa ẩn
                 kh.LockoutEnabled = false;
             }
-            db.SaveChanges();
+            int n = db.SaveChanges();
+            if(n > 0)
+            {
+                Session["Bikhoa"] = "true";
+            }
             return RedirectToAction("Index");
         }
 
@@ -210,6 +214,7 @@ namespace WineShop.Areas.Administrator.Controllers
             }
             var kh = db.AspNetUsers.Single<AspNetUser>(h => h.Id.Equals(id));
             kh.LockoutEnabled = true;
+            Session["Bikhoa"] = null;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
