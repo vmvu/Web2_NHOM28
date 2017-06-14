@@ -143,15 +143,19 @@ namespace WineShop.Areas.Administrator.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var lsp = db.LoaiSanPhams.Single(l => l.MaLoaiSanPham == id && l.BiXoa == 0);
+            var lsp = db.LoaiSanPhams.Single(l => l.MaLoaiSanPham == id );
             var count = lsp.SanPhams.Count;
+            var countXoaAn = lsp.SanPhams.Where(s => s.BiXoa == 1).Count();
             if (count == 0)
             {
                 db.LoaiSanPhams.Remove(lsp);
-                db.SaveChanges();
             }
-            
-            
+            if(count == countXoaAn)
+            {
+                lsp.BiXoa = 1;
+            }
+            db.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }

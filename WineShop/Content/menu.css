@@ -17,7 +17,7 @@ border-radius:3px;
 }
 /* main menu styles */
 #nav {
-display:inline-block;
+display:block;
 width:100%;
 margin:0px auto;
 padding:0;
@@ -61,7 +61,7 @@ text-shadow:0 2px 2px rgba(255,255,255, 0.7);
 background:none;
 border:none;
 color:#000;
-overflow:visible;
+/*overflow:visible;*/
 }
 #nav ul li a:hover {
 background:#e5e5e5 url(../images/bg.png) repeat-x 0 -100px;
@@ -85,20 +85,20 @@ text-shadow:0 2px 2px rgba(0,0,0, 0.7);
 }
 /* drop down */
 #nav li:hover > ul {
-opacity:1;
+/*opacity:1;
 visibility:visible;
-overflow:visible;
+overflow:visible;*/
 }
 #nav ul {
 opacity:0;
-z-index: 2;
+/*z-index: 2;*/
 visibility:unset;
 padding:0;
 width:175px;
 position:absolute;
 background:#e5e5e5 url(../images/bg.png) repeat-x 0 0;
 border:1px solid #7788aa;
-border-radius:10px; /*some css3*/
+border-radius:10px; 
 -moz-border-radius:10px;
 -webkit-border-radius:10px;
 box-shadow:0 2px 2px rgba(0,0,0, .5);

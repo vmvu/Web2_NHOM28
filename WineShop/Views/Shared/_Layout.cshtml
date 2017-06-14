@@ -3,7 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to shop</title>
+    <meta property="fb:app_id" content="1770232879954779" />
+    <meta property="fb:admins" content="100002695464947" />
+    @{
+        ViewBag.Title = "Shop Wine";
+    }
+    <title>@ViewBag.Title</title>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,100,100italic,300,300italic,400italic,700,700italic,900' rel='stylesheet' type='text/css'>
 
     @Styles.Render("~/Content/css")
@@ -14,7 +19,6 @@
     <div id="header" class="header header8">
         @{ Html.RenderAction("Search", "SanPhams");}
         @{ Html.RenderAction("TopHeader", "Modules");}
-
         <!--/.top-header -->
         <!-- MAIN HEADER -->
         @*@{ Html.RenderAction("Menu", "UIConponent");}*@
@@ -30,3 +34,4 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<noembed/>

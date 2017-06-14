@@ -25,7 +25,7 @@
             <h4>Phân quyền</h4>
             <div class="tools">
                 <a href="javascript:;" class="collapse"></a>
-                <a href="javascript:;" class="reload"></a> <a href="javascript:;" class="remove"></a>
+                </a> <a href="javascript:;" class="remove"></a>
             </div>
         </div>
         <div class="grid-body">
@@ -65,26 +65,12 @@
 @if (Model.LockoutEnabled == false)
 {
     <div class="col-md-6">
-        <div class="grid simple horizontal red">
-            <div class="grid-title ">
-                <h4>Phục hồi</h4>
-                <div class="tools">
-                    <a href="javascript:;" class="collapse"></a>
-                    <a href="javascript:;" class="reload"></a> <a href="javascript:;" class="remove"></a>
-                </div>
-            </div>
-            <div class="grid-body">
-                <div>
-                    <h3>tên đăng nhập<span class="semi-bold"> @Model.UserName</span></h3>
-                    <div class="color-bands green"></div>
-                    <div class="color-bands purple"></div>
-                    <div class="color-bands red"></div>
-                    <div class="color-bands blue"></div>
+        <div class="grid simple horizontal white">
+                    <br />
                     <a class="remove" href="@Url.Action("PhucHoi", "KhachHang", new { id = Model.Id})">
-                        Phục hồi tài khoản
+                        
+                        <img src="~/Areas/Administrator/Content/assets/img/Ref.png" width="300" height="300"/>
                     </a>
-                </div>
-            </div>
         </div>
     </div>
 }

@@ -8,10 +8,10 @@
                 <li class="product col-sm-9 col-md-12">
                     <div class="product-container">
                         <div class="product-thumb">
-                            <a style="text-decoration:none;" href="SanPhams/HienThiChiTietSanPham/@item.MaSanPham">
+                            <a style="text-decoration:none;" href="@Url.Action("HienThiChiTietSanPham","SanPhams", new { id = item.MaSanPham})">
                                 @foreach (var h in item.HinhAnhs)
                                 {
-                                    <img src="~/Images/@h.TenHinh" width="80" height="200" alt="Sản phẩm" />
+                                    <img src="~/Images/@h.TenHinh" width="50" height="200" alt="Sản phẩm" />
                                     break;
                                 }
                             </a>

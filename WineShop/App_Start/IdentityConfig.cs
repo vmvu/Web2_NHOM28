@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using WineShop.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace WineShop
 {
@@ -18,6 +20,33 @@ namespace WineShop
     {
         public Task SendAsync(IdentityMessage message)
         {
+            var client = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                UseDefaultCredentials = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                Credentials = new NetworkCredential("vltteam14ck3@gmail.com", "vltteam14ck3mail.com"),
+                EnableSsl = true,
+            };
+
+            var from = new MailAddress("vltteam14ck3@gmail.com", "WineShop");
+            var to = new MailAddress(message.Destination);
+
+            var mail = new MailMessage(from, to)
+            {
+                Subject = message.Subject,
+                Body = message.Body,
+                IsBodyHtml = true,
+            };
+            try
+            {
+                client.Send(mail);
+            }
+            catch
+            {
+                return Task.FromResult(0);
+            }
             // Plug in your email service here to send an email.
             return Task.FromResult(0);
         }
@@ -40,7 +69,7 @@ namespace WineShop
         {
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
@@ -81,7 +110,7 @@ namespace WineShop
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
+                manager.UserTokenProvider =
                     new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;

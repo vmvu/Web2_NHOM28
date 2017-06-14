@@ -22,7 +22,7 @@ namespace WineShop.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +34,9 @@ namespace WineShop.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -75,11 +75,20 @@ namespace WineShop.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
+                    Session["CartSession"] = null;
                     Session["DangNhap"] = "1";
+                    ShopRuouDBEntities db = new ShopRuouDBEntities();
+                    AspNetUser us = db.AspNetUsers.Single(u => u.Email == model.Email);
+                    if (us.LockoutEnabled == false)
+                    {
+                        AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+                        Session["DangNhap"] = null;
+                        return View(model);
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -87,7 +96,7 @@ namespace WineShop.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Tài khoảng hoặc mật khẩu không đúng.");
                     return View(model);
             }
         }
@@ -121,7 +130,7 @@ namespace WineShop.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -154,17 +163,28 @@ namespace WineShop.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
+                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Xác thực tài khoản của bạn", "Vui lòng click vào <a href=\"" + callbackUrl + "\">đây</a> để thực hiện việc xác thực");
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                    Session["CartSession"] = null;
                     Session["DangNhap"] = "1";
+                    //return RedirectToAction("Index", "Home");
+                    ViewBag.Message = "Chúng tôi đã gửi email cho việc xác thực tài khoản đến email của bạn. Kiểm tra email của bạn để thực hiện việc xác thực.";
+
+                    Session["DangKyRoles"] = "DKRoles";
+                        
                     return RedirectToAction("Index", "Home");
+                    //return View(model);
                 }
                 AddErrors(result);
             }
@@ -212,10 +232,10 @@ namespace WineShop.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "Khôi phục mật khẩu", "Bạn hãy click vào <a href=\"" + callbackUrl + "\">đây</a> để lấy lại mật khẩu.");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -385,7 +405,14 @@ namespace WineShop.Controllers
             ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
-
+        public ActionResult LogOffs()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session["CartSession"] = null;
+            Session["DangNhap"] = null;
+            Session["BiKhoa"] = null;
+            return RedirectToAction("Index", "Home");
+        }
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -393,7 +420,9 @@ namespace WineShop.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session["CartSession"] = null;
             Session["DangNhap"] = null;
+            Session["BiKhoa"] = null;
             return RedirectToAction("Index", "Home");
         }
 
